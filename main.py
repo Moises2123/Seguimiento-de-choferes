@@ -82,11 +82,13 @@ class RegistroResponse(BaseModel):
 
 # Lista de choferes
 CHOFERES = [
-    "Carlos Rodríguez",
-    "Miguel Ángel Torres",
-    "Juan Pérez",
-    "Luis Gómez",
-    "Pedro Ramírez"
+    "Morris Larrañaga Policarpio",
+    "Saucedo Abad Florencio",
+    "Rojas Gutierrez Hermes",
+    "Paciffico Valles Publio Salvador",
+    "Noronha Gomez Joao Andre",
+    "Jhean Marco Guerra Vasquez",
+    "Reategui Vasquez Javier"
 ]
 
 # Obtener hora actual en Perú
