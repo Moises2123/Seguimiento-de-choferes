@@ -8,154 +8,273 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css" rel="stylesheet">
-    <link href="/static/css/styles.css" rel="stylesheet">
-    <link href="/static/css/styles.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/js/script.js" rel="stylesheet">
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
+    <!-- Background Elements -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
             <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline">Gestión de Choferes</span>
-                    </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0 text-white active" onclick="mostrarFormulario()">
-                                <i class="fas fa-plus-circle"></i> <span class="ms-1 d-none d-sm-inline">Nuevo Registro</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle text-white" onclick="mostrarHistorial()">
-                                <i class="fas fa-history"></i> <span class="ms-1 d-none d-sm-inline">Historial</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <hr>
-                    <div class="dropdown pb-4">
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                            <span class="d-none d-sm-inline mx-1">Administrador</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a class="dropdown-item" href="#">Configuración</a></li>
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+            <div class="col-auto">
+                <nav class="sidebar glass-sidebar">
+                    <div class="sidebar-header">
+                        <div class="brand-container">
+                            <div class="brand-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="brand-text">
+                                <h5>TranspoControl</h5>
+                                <small>Sistema de Gestión</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-menu">
+                        <ul class="nav-menu">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active" onclick="mostrarFormulario()">
+                                    <div class="nav-icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </div>
+                                    <span class="nav-text">Nuevo Registro</span>
+                                    <div class="nav-indicator"></div>
+                                </a>
                             </li>
-                            <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" onclick="mostrarHistorial()">
+                                    <div class="nav-icon">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <span class="nav-text">Historial</span>
+                                    <div class="nav-indicator"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+
                         </ul>
                     </div>
-                </div>
+
+                    <div class="sidebar-footer">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img src="" alt="">
+                                <div class="status-indicator"></div>
+                            </div>
+                            <div class="user-info">
+                                <h6>Secretaria de Administración</h6>
+                                <small>En línea</small>
+                            </div>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu glass-dropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Perfil</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
             </div>
-            
-            <!-- Contenido Principal -->
-            <div class="col py-3">
-                <!-- Header -->
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2" id="pageTitleHeader">Sistema de Gestión de Choferes</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <span id="currentDateTime" class="btn btn-sm btn-outline-secondary"></span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Sección de formulario de registro -->
-                <div id="formularioRegistro" class="animate__animated animate__fadeIn">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Registro de Movilidad</h5>
+            <!-- Main Content -->
+            <div class="col">
+                <div class="main-content">
+                    <!-- Header -->
+                    <header class="main-header glass-header">
+                        <div class="header-content">
+                            <div class="header-left">
+                                <h1 class="page-title" id="pageTitleHeader">
+                                    <span class="title-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </span>
+                                    Dashboard Principal
+                                </h1>
+                                <p class="page-subtitle">Gestiona la movilidad de tu flota vehicular</p>
+                            </div>
+                            <div class="header-right">
+                                <div class="header-widgets">
+                                    <div class="widget glass-widget">
+                                        <div class="widget-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="widget-content">
+                                            <div class="widget-label">Hora Actual</div>
+                                            <div class="widget-value" id="currentDateTime">--:--:--</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form id="registroForm">
-                                <input type="hidden" id="registroId" value="">
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="nombre_chofer" class="form-label">Nombre del Chofer</label>
-                                        <select class="form-select" id="nombre_chofer" required>
-                                            <option value="" selected disabled>Seleccione un chofer</option>
-                                            {% for chofer in choferes %}
-                                            <option value="{{ chofer }}">{{ chofer }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="tipo" class="form-label">Tipo de Registro</label>
-                                        <select class="form-select" id="tipo" required>
-                                            <option value="" selected disabled>Seleccione tipo</option>
-                                            <option value="Entrada">Entrada</option>
-                                            <option value="Salida">Salida</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="destino" class="form-label">Destino</label>
-                                        <input type="text" class="form-control" id="destino" placeholder="Ingrese el destino" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="diligencia" class="form-label">Diligencia</label>
-                                        <input type="text" class="form-control" id="diligencia" placeholder="Ingrese la diligencia" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="sustento" class="form-label">Sustento</label>
-                                        <input type="text" class="form-control" id="sustento" placeholder="Ingrese el sustento" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="solicitud" class="form-label">Solicitud de Movilidad</label>
-                                        <input type="text" class="form-control" id="solicitud" placeholder="Ingrese la solicitud" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <label for="responsable" class="form-label">Quien realiza la diligencia</label>
-                                        <input type="text" class="form-control" id="responsable" placeholder="Ingrese el responsable" required>
-                                    </div>
-                                </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-secondary me-md-2" onclick="limpiarFormulario()">Limpiar</button>
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                    </header>
 
-                <!-- Sección de historial -->
-                <div id="historialRegistros" class="animate__animated animate__fadeIn" style="display: none;">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Historial de Registros</h5>
-                            <button class="btn btn-sm btn-light" onclick="recargarHistorial()">
-                                <i class="fas fa-sync-alt"></i> Actualizar
-                            </button>
+                    <!-- Content Area -->
+                    <div class="content-area">
+                        <!-- Formulario de Registro -->
+                        <div id="formularioRegistro" class="content-section animate__animated animate__fadeIn">
+                            <div class="glass-card modern-card">
+                                <div class="card-header gradient-header">
+                                    <div class="header-icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5>Registro de Movilidad</h5>
+                                        <small>Completa la información del viaje</small>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form id="registroForm" class="modern-form">
+                                        <input type="hidden" id="registroId" value="">
+                                        
+                                        <div class="form-grid">
+                                            <div class="form-group">
+                                                <label for="nombre_chofer" class="form-label">
+                                                    <i class="fas fa-user"></i>
+                                                    Nombre del Chofer
+                                                </label>
+                                                <select class="form-control glass-input" id="nombre_chofer" required>
+                                                    <option value="" selected disabled>Seleccione un chofer</option>
+                                                    {% for chofer in choferes %}
+                                                    <option value="{{ chofer }}">{{ chofer }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="tipo" class="form-label">
+                                                    <i class="fas fa-exchange-alt"></i>
+                                                    Tipo de Registro
+                                                </label>
+                                                <select class="form-control glass-input" id="tipo" required>
+                                                    <option value="" selected disabled>Seleccione tipo</option>
+                                                    <option value="Entrada">Entrada</option>
+                                                    <option value="Salida">Salida</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="destino" class="form-label">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    Destino
+                                                </label>
+                                                <input type="text" class="form-control glass-input" id="destino" 
+                                                       placeholder="Ingrese el destino" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="diligencia" class="form-label">
+                                                    <i class="fas fa-tasks"></i>
+                                                    Diligencia
+                                                </label>
+                                                <input type="text" class="form-control glass-input" id="diligencia" 
+                                                       placeholder="Ingrese la diligencia" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="sustento" class="form-label">
+                                                    <i class="fas fa-file-alt"></i>
+                                                    Sustento
+                                                </label>
+                                                <input type="text" class="form-control glass-input" id="sustento" 
+                                                       placeholder="Ingrese el sustento" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="solicitud" class="form-label">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                    Solicitud de Movilidad
+                                                </label>
+                                                <input type="text" class="form-control glass-input" id="solicitud" 
+                                                       placeholder="Ingrese la solicitud" required>
+                                            </div>
+
+                                            <div class="form-group full-width">
+                                                <label for="responsable" class="form-label">
+                                                    <i class="fas fa-user-tie"></i>
+                                                    Quien realiza la diligencia
+                                                </label>
+                                                <input type="text" class="form-control glass-input" id="responsable" 
+                                                       placeholder="Ingrese el responsable" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button type="button" class="btn btn-secondary glass-btn" onclick="limpiarFormulario()">
+                                                <i class="fas fa-eraser"></i>
+                                                Limpiar
+                                            </button>
+                                            <button type="submit" class="btn btn-primary gradient-btn">
+                                                <i class="fas fa-save"></i>
+                                                Guardar
+                                            </button>
+                                        </div>
+                                        <div class="form-actions">
+                                                <button type="button" class="btn btn-secondary glass-btn" onclick="limpiarFormulario()">
+                                                    <i class="fas fa-eraser"></i>
+                                                    imprimir en pdf 
+                                                </button>
+                                                <button type="submit" class="btn btn-primary gradient-btn">
+                                                    <i class="fas fa-save"></i>
+                                                    Descargar pdf
+                                                </button>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover table-sm">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Chofer</th>
-                                            <th>Tipo</th>
-                                            <th>Destino</th>
-                                            <th>Diligencia</th>
-                                            <th>Sustento</th>
-                                            <th>Solicitud</th>
-                                            <th>Responsable</th>
-                                            <th>Fecha y Hora</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaRegistros">
-                                        <!-- Aquí se cargarán los registros -->
-                                    </tbody>
-                                </table>
+
+                        <!-- Historial de Registros -->
+                        <div id="historialRegistros" class="content-section animate__animated animate__fadeIn" style="display: none;">
+                            <div class="glass-card modern-card">
+                                <div class="card-header gradient-header">
+                                    <div class="header-icon">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <div class="header-text">
+                                        <h5>Historial de Registros</h5>
+                                        <small>Consulta todos los movimientos registrados</small>
+                                    </div>
+                                    <div class="header-actions">
+                                        <button class="btn btn-refresh glass-btn" onclick="recargarHistorial()">
+                                            <i class="fas fa-sync-alt"></i>
+                                            Actualizar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-container">
+                                        <table class="table modern-table">
+                                            <thead class="table-header">
+                                                <tr>
+                                                    <th><i class="fas fa-hashtag"></i> ID</th>
+                                                    <th><i class="fas fa-user"></i> Chofer</th>
+                                                    <th><i class="fas fa-tag"></i> Tipo</th>
+                                                    <th><i class="fas fa-map-marker-alt"></i> Destino</th>
+                                                    <th><i class="fas fa-tasks"></i> Diligencia</th>
+                                                    <th><i class="fas fa-file-alt"></i> Sustento</th>
+                                                    <th><i class="fas fa-paper-plane"></i> Solicitud</th>
+                                                    <th><i class="fas fa-user-tie"></i> Responsable</th>
+                                                    <th><i class="fas fa-clock"></i> Fecha y Hora</th>
+                                                    <th><i class="fas fa-cogs"></i> Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaRegistros" class="table-body">
+                                                <!-- Aquí se cargarán los registros -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -164,6 +283,15 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.all.min.js"></script>

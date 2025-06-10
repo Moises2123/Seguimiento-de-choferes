@@ -12,6 +12,17 @@ import os
 import uvicorn
 from backup_utils import backup_to_csv, backup_database
 
+
+from fpdf import FPDF
+
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+pdf.cell(200, 10, txt="Hola, este es tu PDF", ln=True, align='C')
+pdf.output("archivo.pdf")
+
+os.startfile("archivo.pdf", "print")        
+
 # Crear la app de FastAPI
 app = FastAPI(title="Sistema de Gestión de Choferes")
 
@@ -23,6 +34,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app =
 
 # Configurar carpetas de plantillas y estáticos
 templates = Jinja2Templates(directory="templates")
@@ -224,4 +236,4 @@ async def startup_event():
 # Ejecutar la aplicación
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
