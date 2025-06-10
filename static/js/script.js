@@ -603,6 +603,56 @@ function descargarArchivo(contenido, nombreArchivo, tipoMime) {
     window.URL.revokeObjectURL(url);
 }
 
+// Funcionalidad para exportar e imprimir historial en PDF
+function descargarHistorialPDF() {
+    if (registros.length === 0) {
+        mostrarNotificacion('warning', 'Sin datos', 'No hay registros para exportar');
+        return;
+    }
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(14);
+    doc.text('Historial de Registros de Movilidad', 14, 15);
+    const headers = [['ID', 'Chofer', 'Tipo', 'Destino', 'Diligencia', 'Sustento', 'Solicitud', 'Responsable', 'Fecha y Hora']];
+    const data = registros.map(r => [
+        r.id,
+        r.nombre_chofer,
+        r.tipo,
+        r.destino,
+        r.diligencia,
+        r.sustento,
+        r.solicitud,
+        r.responsable,
+        r.fecha_hora
+    ]);
+    doc.autoTable({ head: headers, body: data, startY: 25 });
+    doc.save('historial_registros.pdf');
+}
+
+function imprimirHistorialPDF() {
+    if (registros.length === 0) {
+        mostrarNotificacion('warning', 'Sin datos', 'No hay registros para imprimir');
+        return;
+    }
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(14);
+    doc.text('Historial de Registros de Movilidad', 14, 15);
+    const headers = [['ID', 'Chofer', 'Tipo', 'Destino', 'Diligencia', 'Sustento', 'Solicitud', 'Responsable', 'Fecha y Hora']];
+    const data = registros.map(r => [
+        r.id,
+        r.nombre_chofer,
+        r.tipo,
+        r.destino,
+        r.diligencia,
+        r.sustento,
+        r.solicitud,
+        r.responsable,
+        r.fecha_hora
+    ]);
+    doc.autoTable({ head: headers, body: data, startY: 25 });
+    doc.autoPrint();
+    window.open(doc.output('bloburl'), '_blank');
+}
+
 // Búsqueda en tiempo real
 function configurarBusqueda() {
     const inputBusqueda = $('<input>', {

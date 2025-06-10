@@ -5,7 +5,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
-import sqlite3
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from datetime import datetime, timezone
 import pytz
 import os
@@ -46,13 +47,26 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Configuración de la zona horaria
 peru_tz = pytz.timezone('America/Lima')
 
-# Inicializar la base de datos
+# Obtener conexión a la base de datos PostgreSQL
+
+def get_db():
+    conn = psycopg2.connect(
+        dbname=os.getenv('PGDATABASE', 'choferes'),
+        user=os.getenv('PGUSER', 'postgres'),
+        password=os.getenv('PGPASSWORD', 'postgres'),
+        host=os.getenv('PGHOST', 'localhost'),
+        port=os.getenv('PGPORT', '5432')
+    )
+    return conn
+
+# Inicializar la base de datos PostgreSQL
+
 def init_db():
-    conn = sqlite3.connect('choferes.db')
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS registros (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         nombre_chofer TEXT NOT NULL,
         tipo TEXT NOT NULL,
         destino TEXT NOT NULL,
@@ -65,6 +79,7 @@ def init_db():
     )
     ''')
     conn.commit()
+    cursor.close()
     conn.close()
 
 # Modelos de datos
@@ -109,12 +124,6 @@ def get_current_peru_time():
     peru_now = utc_now.astimezone(peru_tz)
     return peru_now.strftime("%Y-%m-%d %H:%M:%S")
 
-# Obtener conexión a la base de datos
-def get_db():
-    conn = sqlite3.connect('choferes.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
 # Rutas
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -125,10 +134,9 @@ async def crear_registro(registro: Registro):
     conn = get_db()
     cursor = conn.cursor()
     peru_time = get_current_peru_time()
-    
     cursor.execute("""
     INSERT INTO registros (nombre_chofer, tipo, destino, diligencia, sustento, solicitud, responsable, fecha_hora, fecha_registro)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
     """, (
         registro.nombre_chofer, 
         registro.tipo, 
@@ -140,9 +148,9 @@ async def crear_registro(registro: Registro):
         registro.fecha_hora or peru_time,
         peru_time
     ))
-    
-    registro_id = cursor.lastrowid
+    registro_id = cursor.fetchone()[0]
     conn.commit()
+    cursor.close()
     conn.close()
     
     # Realizar respaldo
@@ -154,40 +162,40 @@ async def crear_registro(registro: Registro):
 @app.get("/registros/", response_model=List[RegistroResponse])
 async def listar_registros():
     conn = get_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute("SELECT * FROM registros ORDER BY id DESC")
-    
-    registros = [dict(row) for row in cursor.fetchall()]
+    registros = cursor.fetchall()
+    cursor.close()
     conn.close()
     return registros
 
 @app.get("/registros/{registro_id}", response_model=RegistroResponse)
 async def obtener_registro(registro_id: int):
     conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM registros WHERE id = ?", (registro_id,))
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM registros WHERE id = %s", (registro_id,))
     registro = cursor.fetchone()
+    cursor.close()
     conn.close()
     
     if registro is None:
         raise HTTPException(status_code=404, detail="Registro no encontrado")
     
-    return dict(registro)
+    return registro
 
 @app.put("/registros/{registro_id}")
 async def actualizar_registro(registro_id: int, registro: Registro):
     conn = get_db()
     cursor = conn.cursor()
-    
-    cursor.execute("SELECT id FROM registros WHERE id = ?", (registro_id,))
+    cursor.execute("SELECT id FROM registros WHERE id = %s", (registro_id,))
     if not cursor.fetchone():
+        cursor.close()
         conn.close()
         raise HTTPException(status_code=404, detail="Registro no encontrado")
-    
     cursor.execute("""
     UPDATE registros
-    SET nombre_chofer = ?, tipo = ?, destino = ?, diligencia = ?, sustento = ?, solicitud = ?, responsable = ?
-    WHERE id = ?
+    SET nombre_chofer = %s, tipo = %s, destino = %s, diligencia = %s, sustento = %s, solicitud = %s, responsable = %s
+    WHERE id = %s
     """, (
         registro.nombre_chofer,
         registro.tipo,
@@ -198,8 +206,8 @@ async def actualizar_registro(registro_id: int, registro: Registro):
         registro.responsable,
         registro_id
     ))
-    
     conn.commit()
+    cursor.close()
     conn.close()
     
     # Realizar respaldo
@@ -212,14 +220,14 @@ async def actualizar_registro(registro_id: int, registro: Registro):
 async def eliminar_registro(registro_id: int):
     conn = get_db()
     cursor = conn.cursor()
-    
-    cursor.execute("SELECT id FROM registros WHERE id = ?", (registro_id,))
+    cursor.execute("SELECT id FROM registros WHERE id = %s", (registro_id,))
     if not cursor.fetchone():
+        cursor.close()
         conn.close()
         raise HTTPException(status_code=404, detail="Registro no encontrado")
-    
-    cursor.execute("DELETE FROM registros WHERE id = ?", (registro_id,))
+    cursor.execute("DELETE FROM registros WHERE id = %s", (registro_id,))
     conn.commit()
+    cursor.close()
     conn.close()
     
     # Realizar respaldo

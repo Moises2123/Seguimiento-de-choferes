@@ -4,32 +4,13 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
 
-# Base de datos
-*.db
-*.sqlite3
-
-# Entorno virtual
+# Entornos virtuales
 venv/
 ENV/
 env/
 
-# IDE
+# IDEs y editores
 .idea/
 .vscode/
 *.swp
@@ -41,3 +22,20 @@ env/
 # Archivos temporales del sistema
 .DS_Store
 Thumbs.db
+
+# Archivos de base de datos y respaldos
+*.db
+*.sqlite3
+backups/
+backup_*.csv
+
+# Archivos de configuración sensibles
+.env
+.env.*
+
+# Archivos PDF generados
+*.pdf
+
+# Otros archivos temporales
+*.tmp
+*.bak

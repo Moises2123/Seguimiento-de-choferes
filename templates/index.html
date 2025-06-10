@@ -219,16 +219,6 @@
                                                 Guardar
                                             </button>
                                         </div>
-                                        <div class="form-actions">
-                                                <button type="button" class="btn btn-secondary glass-btn" onclick="limpiarFormulario()">
-                                                    <i class="fas fa-eraser"></i>
-                                                    imprimir en pdf 
-                                                </button>
-                                                <button type="submit" class="btn btn-primary gradient-btn">
-                                                    <i class="fas fa-save"></i>
-                                                    Descargar pdf
-                                                </button>
-                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -249,6 +239,14 @@
                                         <button class="btn btn-refresh glass-btn" onclick="recargarHistorial()">
                                             <i class="fas fa-sync-alt"></i>
                                             Actualizar
+                                        </button>
+                                        <button class="btn btn-secondary glass-btn" onclick="descargarHistorialPDF()">
+                                            <i class="fas fa-file-pdf"></i>
+                                            Descargar PDF
+                                        </button>
+                                        <button class="btn btn-secondary glass-btn" onclick="imprimirHistorialPDF()">
+                                            <i class="fas fa-print"></i>
+                                            Imprimir PDF
                                         </button>
                                     </div>
                                 </div>
@@ -295,6 +293,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>
