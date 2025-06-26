@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, Request, Form, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
+# main.py
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,20 +13,11 @@ import pytz
 import os
 import uvicorn
 from backup_utils import backup_to_csv, backup_database
-
-
-from fpdf import FPDF
-
-pdf = FPDF()
-pdf.add_page()
-pdf.set_font("Arial", size=12)
-pdf.cell(200, 10, txt="Hola, este es tu PDF", ln=True, align='C')
-pdf.output("archivo.pdf")
-
-os.startfile("archivo.pdf", "print")        
+from dotenv import load_dotenv
+load_dotenv()
 
 # Crear la app de FastAPI
-app = FastAPI(title="Sistema de Gestión de Choferes")
+app = FastAPI(title="Gestor de choferes", description="API para gestionar registros de choferes", version="1.0.0")
 
 # Configurar CORS
 app.add_middleware(
@@ -34,8 +26,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
-app =
+)  
 
 # Configurar carpetas de plantillas y estáticos
 templates = Jinja2Templates(directory="templates")
@@ -48,39 +39,51 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 peru_tz = pytz.timezone('America/Lima')
 
 # Obtener conexión a la base de datos PostgreSQL
-
 def get_db():
-    conn = psycopg2.connect(
-        dbname=os.getenv('PGDATABASE', 'choferes'),
-        user=os.getenv('PGUSER', 'postgres'),
-        password=os.getenv('PGPASSWORD', 'postgres'),
-        host=os.getenv('PGHOST', 'localhost'),
-        port=os.getenv('PGPORT', '5432')
-    )
-    return conn
+    try:
+        conn = psycopg2.connect(
+            dbname=os.getenv('PGDATABASE', 'choferes'),
+            user=os.getenv('PGUSER', 'postgres'),
+            password=os.getenv('PGPASSWORD', 'postgres'),
+            host=os.getenv('PGHOST', 'localhost'),
+            port=os.getenv('PGPORT', '5432')
+        )
+        return conn
+    except Exception as e:
+        print(f"Error connecting to database: {e}")
+        # Crear una conexión por defecto si falla
+        try:
+            conn = psycopg2.connect(
+                dbname=os.getenv('PGDATABASE', 'postgres'),
+                user=os.getenv('PGUSER', 'postgres'),
+                password=os.getenv('PGPASSWORD', 'postgres'),
+                host=os.getenv('PGHOST', 'localhost'),
+                port=os.getenv('PGPORT', '5432')
+            )
+            return conn
+        except Exception as e2:
+            print(f"Error connecting to default database: {e2}")
+            raise e2
 
 # Inicializar la base de datos PostgreSQL
-
 def init_db():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS registros (
-        id SERIAL PRIMARY KEY,
-        nombre_chofer TEXT NOT NULL,
-        tipo TEXT NOT NULL,
-        destino TEXT NOT NULL,
-        diligencia TEXT NOT NULL,
-        sustento TEXT NOT NULL,
-        solicitud TEXT NOT NULL,
-        responsable TEXT NOT NULL,
-        fecha_hora TEXT NOT NULL,
-        fecha_registro TEXT NOT NULL
-    )
-    ''')
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with get_db() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS registros (
+                id SERIAL PRIMARY KEY,
+                nombre_chofer TEXT NOT NULL,
+                tipo TEXT NOT NULL,
+                destino TEXT NOT NULL,
+                diligencia TEXT NOT NULL,
+                sustento TEXT NOT NULL,
+                solicitud TEXT NOT NULL,
+                responsable TEXT NOT NULL,
+                fecha_hora TEXT NOT NULL,
+                fecha_registro TEXT NOT NULL
+            )
+            ''')
+            conn.commit()
 
 # Modelos de datos
 class Registro(BaseModel):
@@ -244,4 +247,4 @@ async def startup_event():
 # Ejecutar la aplicación
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

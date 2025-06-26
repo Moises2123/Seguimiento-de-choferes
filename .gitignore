@@ -1,4 +1,24 @@
-# Archivos generados por Python
+# Archivos de entorno y configuración sensibles
+.env
+.env.*
+
+# Archivos de base de datos y respaldos
+*.db
+*.sqlite3
+backups/
+backup_*.csv
+
+# Archivos PDF generados
+*.pdf
+
+# Archivos temporales y de sistema
+*.tmp
+*.bak
+*.log
+.DS_Store
+Thumbs.db
+
+# Archivos de Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -16,26 +36,4 @@ env/
 *.swp
 *.swo
 
-# Logs
-*.log
-
-# Archivos temporales del sistema
-.DS_Store
-Thumbs.db
-
-# Archivos de base de datos y respaldos
-*.db
-*.sqlite3
-backups/
-backup_*.csv
-
-# Archivos de configuración sensibles
-.env
-.env.*
-
-# Archivos PDF generados
-*.pdf
-
 # Otros archivos temporales
-*.tmp
-*.bak

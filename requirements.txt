@@ -5,3 +5,4 @@ python-multipart==0.0.6
 pytz==2023.3
 pydantic==2.3.0
 psycopg2-binary==2.9.9
+python-dotenv

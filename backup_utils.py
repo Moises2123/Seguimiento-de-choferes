@@ -1,6 +1,5 @@
 import psycopg2
 import csv
-import shutil
 from datetime import datetime
 import os
 
@@ -29,5 +28,5 @@ def backup_to_csv(db_params=None, backup_file="backup_choferes.csv"):
 
 # Respaldo del archivo de base de datos (no aplica igual para PostgreSQL, pero se puede hacer un dump externo)
 def backup_database():
-    # Puedes usar pg_dump para un respaldo completo si lo deseas
-    print("Para respaldo completo de PostgreSQL, use pg_dump desde la terminal.")
+    # Placeholder: Para respaldo completo de PostgreSQL, use pg_dump desde la terminal.
+    pass
